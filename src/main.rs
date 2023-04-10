@@ -8,8 +8,8 @@ use rocket::response::NamedFile;
 use rocket_contrib::{serve::StaticFiles,};
 
 #[get("/")]
-fn index() -> &'static str {
-    "Hello, world!"
+fn index() -> NamedFile {
+    NamedFile::open(Path::new("static/index.html")).unwrap()
 }
 
 #[get("/hello")]
@@ -22,14 +22,14 @@ fn world() -> &'static str {  // <- request handler
     "hello, outside world!"
 }
 
-#[get("/balls")]
-fn static_file()  -> NamedFile {
-    NamedFile::open(Path::new("static/static.html")).unwrap()
-}
+// #[get("/balls")]
+// fn static_file()  -> NamedFile {
+//     NamedFile::open(Path::new("static/index.html")).unwrap()
+// }
 
 fn main() {
     rocket::ignite()
-    .mount("/", routes![index, hello, world, static_file])
+    .mount("/", routes![index, hello, world,])
     .mount("/", StaticFiles::from("static"))
     .launch();
 }
